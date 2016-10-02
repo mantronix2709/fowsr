@@ -942,6 +942,8 @@ void buildJson(char *sWeatherData) {
     while (aWeatherData[i] != NULL) {
        aWeatherData[++i] = strtok(NULL, ";");
     }
+//TODO: Build pymultimonaprs Structur
+
 	printf("timestamp:   %s\n",aWeatherData[0]);
 	printf("speed:       %s\n",aWeatherData[1]);
 	printf("direction:   %s\n",aWeatherData[2]);
