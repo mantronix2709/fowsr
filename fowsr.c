@@ -1,3 +1,4 @@
+
 /* Fine Offset Weather Station Reader - Main file
 
    (C) Arne-Jørgen Auberg (arne.jorgen.auberg@gmail.com)
@@ -50,7 +51,6 @@
 #include <time.h>
 
 #include <usb.h>
-#include <json-c/json.h>
 
 /***************** macros ****************************************************/
 // WORKPATH default path for all outputfiles (log, dat, msg)
@@ -802,12 +802,13 @@ int CWF_Write(char arg, const char* fname, const char* ftype)
             case 'm':
                 // Just write out the last records to json file
                 // we want to manage it here because we need the iteration for calculation of rain
+               
                 if (current_pos == end_pos) {
                     // Save in pymultimonaprs format
                     n=strftime(s1,sizeof(s1),"%s", gmtime(&timestamp));
                     // Calculate relative pressure
                     multimon_format[WS_MULTIMON_PRESSURE].offset = pressOffs_hPa;
-
+					
                     for (j=0;j<WS_MULTIMON_RECORDS;j++) {
                         if (j==WS_MULTIMON_HOURLY_RAIN || j==WS_MULTIMON_DAILY_RAIN) {
                             CWS_decode(&m_buf[multimon_format[j].pos],
@@ -822,9 +823,10 @@ int CWF_Write(char arg, const char* fname, const char* ftype)
                                     multimon_format[j].offset,
                                     s2);
                         }
-                        sprintf(s1+strlen(s1), ";%s", s2);
+						sprintf(s1+strlen(s1), ";%s", s2);
                     };
-                    buildJson(s1);
+                   buildJson(s1);                 
+                   //s1= Zielstring 
                 }
             break;
             case 'p':
@@ -940,46 +942,16 @@ void buildJson(char *sWeatherData) {
     while (aWeatherData[i] != NULL) {
        aWeatherData[++i] = strtok(NULL, ";");
     }
+	printf("timestamp:   %s\n",aWeatherData[0]);
+	printf("speed:       %s\n",aWeatherData[1]);
+	printf("direction:   %s\n",aWeatherData[2]);
+	printf("gust:        %s\n",aWeatherData[3]);
+	printf("Temperature: %s\n",aWeatherData[4]);
+	printf("Rainlast1h:  %s\n",aWeatherData[5]);
+	printf("RainMidnight:%s\n",aWeatherData[6]);
+	printf("Humidity:    %s\n",aWeatherData[7]);
+	printf("Pressure:    %s\n",aWeatherData[8]);
 
-    // Creating a json object for main
-    json_object * joMain = json_object_new_object();
-    json_object *jsTimestamp = json_object_new_string(aWeatherData[0]);
-
-    // Creating a json object for wind
-    json_object * joWind = json_object_new_object();
-        json_object *jsSpeed = json_object_new_string(aWeatherData[1]);
-        json_object *jsDirection = json_object_new_string(aWeatherData[2]);
-        json_object *jsGust = json_object_new_string(aWeatherData[3]);
-    // Form the json object for wind
-    json_object_object_add(joWind,"speed", jsSpeed);
-    json_object_object_add(joWind,"direction", jsDirection);
-    json_object_object_add(joWind,"gust", jsGust);
-
-    json_object *jsTemperature = json_object_new_string(aWeatherData[4]);
-
-    // Creating a json object for rain
-    json_object * joRain = json_object_new_object();
-        json_object *jsRainLast1h = json_object_new_string(aWeatherData[5]);
-        //json_object *jsRainLast24h = json_object_new_string(20);
-        json_object *jsRainMidnight = json_object_new_string(aWeatherData[6]);
-    // Form the json object for rain
-    json_object_object_add(joRain,"rainlast1h", jsRainLast1h);
-    //json_object_object_add(joRain,"rainlast24h", jsRainLast24h);
-    json_object_object_add(joRain,"rainmidnight", jsRainMidnight);
-
-    json_object *jsHumidity = json_object_new_string(aWeatherData[7]);
-    json_object *jsPressure = json_object_new_string(aWeatherData[8]);
-
-    // Form the json object for main
-    json_object_object_add(joMain,"timestamp", jsTimestamp);
-    json_object_object_add(joMain,"wind", joWind);
-    json_object_object_add(joMain,"temperature", jsTemperature);
-    json_object_object_add(joMain,"rain", joRain);
-    json_object_object_add(joMain,"humidity", jsHumidity);
-    json_object_object_add(joMain,"pressure", jsPressure);
-
-    // Write the Json object as string to the buffer
-    sprintf(sWeatherData, "%s", json_object_to_json_string(joMain));
 }
 
 /*****************************************************************************/
