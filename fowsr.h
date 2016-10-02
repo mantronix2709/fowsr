@@ -369,7 +369,7 @@ struct ws_record2 multimon_format[] = {
     {"speed"        , WS_WIND_AVE        , wa , WS_SCALE_MS_TO_KMH      , WS_OFFSET_DEFAULT},   // - [kmh]
     {"direction"    , WS_WIND_DIR        , ub , WS_SCALE_OFFS_TO_DEGREE , WS_OFFSET_DEFAULT},   // - [0-360]
     {"gust"         , WS_WIND_GUST       , wg , WS_SCALE_MS_TO_KMH      , WS_OFFSET_DEFAULT},   // - [windgust kmh]
-    {"temperature"  , WS_TEMPERATURE_OUT , ss , WS_SCALE_DEFAULT        , WS_OFFSET_DEFAULT},   // - [temperature °C]
+    {"temperature"  , WS_TEMPERATURE_OUT , ss , 0.1		        , WS_OFFSET_DEFAULT},   // - [temperature °C]
     {"rainlast1h"   , WS_RAIN_HOUR       , us , WS_SCALE_DEFAULT        , WS_OFFSET_DEFAULT},   // - [hourly rain mm]
     {"rainmidnight" , WS_RAIN_DAY        , us , WS_SCALE_DEFAULT        , WS_OFFSET_DEFAULT},   // - [daily rain mm accumulated]
     {"humidity"     , WS_HUMIDITY_OUT    , ub , WS_SCALE_DEFAULT        , WS_OFFSET_DEFAULT},   // - [%]
