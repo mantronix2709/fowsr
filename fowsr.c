@@ -826,7 +826,7 @@ int CWF_Write(char arg, const char* fname, const char* ftype)
 						sprintf(s1+strlen(s1), ";%s", s2);
                     };
                    buildJson(s1);                 
-                   //s1= Zielstring 
+                   //s1= Zielstring für Dateiausgabe
                 }
             break;
             case 'p':
